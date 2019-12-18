@@ -32,4 +32,6 @@ public class DeptDto {
 	public void setLoc(String loc) {
 		this.loc = loc;
 	}
+	
+	
 }

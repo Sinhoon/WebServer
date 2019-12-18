@@ -21,15 +21,16 @@ public class savedept extends HttpServlet {
 		String loc = req.getParameter("loc");	
 		DeptDto dto = new DeptDto(no,name,loc);
 		DeptDao dao = DeptDao.getInstance();
-		boolean isSuccess = dao.insert(dto);
+		/*boolean isSuccess = dao.insert(dto);
 		if(isSuccess) {
 			resp.sendRedirect("/dept_success.html");
 		}
 		else {
 			resp.sendRedirect("/dept.html");
-		}
+		}*/
 	}
 	
 	
 
 }
+	
