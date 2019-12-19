@@ -41,6 +41,16 @@ public class DeptDao {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			try {
+				if (psmt != null)
+					psmt.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		return isSuccess;
@@ -139,7 +149,7 @@ public class DeptDao {
 
 	
 	public DeptDto select(int no) {
-		DeptDto dto = new DeptDto();
+		DeptDto dto = null;
 		Connection con = null;
 		PreparedStatement psmt = null;
 		ResultSet rs = null;

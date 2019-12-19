@@ -27,6 +27,12 @@
 
 <body>
   <!-- navbar start-->
+  
+  <%
+   //  /dept/list.jsp , /emp/list.jsp
+  String uri = request.getRequestURI();
+  %>
+  
   <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #563d7c">
     <a class="navbar-brand" href="/index.jsp">Home</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
@@ -36,11 +42,14 @@
 
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-        <li class="nav-item active">
+        <li class="nav-item <% if(uri.startsWith("/dept")){ %>active <%}%>">
           <a class="nav-link" href= "/dept/list.jsp?page=1">부서관리<span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">공지사항</a>
+        <li class="nav-item <% if(uri.startsWith("/emp")){ %>active <%}%>">
+          <a class="nav-link" href= "/emp/list.jsp?page=1">사원관리<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item <% if(uri.startsWith("/notice")){ %> active <%}%>">
+          <a class="nav-link" href="/notice/list.jsp?page=1">공지사항</a>
         </li>
       </ul>
       <form class="form-inline my-2 my-lg-0">
