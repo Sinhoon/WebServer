@@ -8,7 +8,7 @@
 <%  
 	int pagenum = 0;
 	int start = 0;
-	int len  = 10;
+	int len  = 5;
 	int totalRows = 0;
 	int totalPage = 0;
 	int startPage = 0;
@@ -18,6 +18,10 @@
 	String tempPage = request.getParameter("page");	
 	if(tempPage==null | tempPage.length()==0){
 		cPage =1;
+	}	
+	if(cPage>totalPage){
+		response.sendRedirect("list.jsp?page=1");
+		return;
 	}
 	try{
 	cPage = Integer.parseInt(tempPage);
