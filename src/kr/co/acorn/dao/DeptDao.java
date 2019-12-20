@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import kr.co.acorn.dto.DeptDto;
-import kr.co.acorn.hello.ConnLoactor;
+import kr.co.acorn.hello.ConnLocator;
 
 public class DeptDao {
 
@@ -28,7 +28,7 @@ public class DeptDao {
 		Connection con = null;
 		PreparedStatement psmt = null;
 		try {
-			con = ConnLoactor.getConnection();
+			con = ConnLocator.getConnection();
 			StringBuffer sql = new StringBuffer();
 			sql.append("INSERT into dept(deptno,dname,loc) VALUES(?,?,?);");
 			psmt = con.prepareStatement(sql.toString());
@@ -62,7 +62,7 @@ public class DeptDao {
 		Connection con = null;
 		PreparedStatement psmt = null;
 		try {
-			con = ConnLoactor.getConnection();
+			con = ConnLocator.getConnection();
 			StringBuffer sql = new StringBuffer();
 			sql.append("update dept set dname = ? , loc = ? where deptno = ?");
 			psmt = con.prepareStatement(sql.toString());
@@ -86,7 +86,7 @@ public class DeptDao {
 		Connection con = null;
 		PreparedStatement psmt = null;
 		try {
-			con = ConnLoactor.getConnection();
+			con = ConnLocator.getConnection();
 			StringBuffer sql = new StringBuffer();
 			sql.append("delete from dept where deptno = ?");
 			psmt = con.prepareStatement(sql.toString());
@@ -110,7 +110,7 @@ public class DeptDao {
 		ResultSet rs = null;
 
 		try {
-			con = ConnLoactor.getConnection();
+			con = ConnLocator.getConnection();
 			StringBuffer sql = new StringBuffer();
 			sql.append("SELECT deptno,dname,loc FROM dept ");
 			sql.append("ORDER BY deptno ");
@@ -154,7 +154,7 @@ public class DeptDao {
 		PreparedStatement psmt = null;
 		ResultSet rs = null;
 		try {
-			con = ConnLoactor.getConnection();
+			con = ConnLocator.getConnection();
 			StringBuffer sql = new StringBuffer();
 			sql.append("SELECT deptno,dname,loc FROM dept ");
 			sql.append("WHERE deptno = ? ");
@@ -198,7 +198,7 @@ public class DeptDao {
 		PreparedStatement psmt = null;
 		ResultSet rs = null;
 		try {
-			con = ConnLoactor.getConnection();
+			con = ConnLocator.getConnection();
 			StringBuffer sql = new StringBuffer();
 			sql.append("SELECT COUNT(deptno) FROM dept ");
 			psmt = con.prepareStatement(sql.toString());

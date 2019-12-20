@@ -9,7 +9,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-public class ConnLoactor{
+public class ConnLocator{
 	public static Connection getConnection() throws SQLException{
 		DataSource ds = null;
 		Connection con = null;
@@ -24,6 +24,6 @@ public class ConnLoactor{
 			e.printStackTrace();
 		}
 		return con;
-			
 	}
+	
 }

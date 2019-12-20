@@ -22,8 +22,8 @@ public class CoinThread extends Thread {
 	private String name;
 	private double price;
 
-	public CoinThread(int delay) {
-		super();
+		public CoinThread(int delay) {
+			super();
 		this.delay = delay;
 	}
 
@@ -35,16 +35,24 @@ public class CoinThread extends Thread {
 		while (true) {
 			Document doc;
 			try {
-				doc = Jsoup.connect("https://www.bithumb.com/").get();
-				Elements items = doc.select(".coin_list tr");
-				for (int i = 0; i < 5; i++) {
+				doc = Jsoup.connect("http://www.jobkorea.co.kr/top100/").get();
+				Elements items = doc.select(".rankList li .co .coTit");
+				//System.out.println(items);
+				for (int i = 0; i < items.size() ; i++) {
 					Element coinElement = items.get(i);
-					name = coinElement.child(0).select("td p a strong").text().replaceAll("[a-zA-Z!]", "");
-					price = Double.parseDouble(coinElement.child(1).text().replaceAll("[¿ø,]", ""));
-					time = format.format(new Date());
-					list.add(new CoinDto(name, price, time));
+					name = coinElement.child(0).select("a").text();
+				     System.out.println(name);
+					//name = coinElement.child(0).select("td p a strong").text().replaceAll("[a-zA-Z!]", "");
+					//price = Double.parseDouble(coinElement.child(1).text().replaceAll("[ì›,]", ""));
+					//time = format.format(new Date());
+					//list.add(new CoinDto(name, price, time));
 				}
-				  for (CoinDto dto : list) { dao.insert(dto); }
+	
+
+				 //for (CoinDto dto : list) { 
+				  //	 dao.insert(dto);
+					 //System.out.println(dto.getName());
+					 //}
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -52,7 +60,7 @@ public class CoinThread extends Thread {
 			}
 
 			try {
-				Thread.sleep(5000);
+				Thread.sleep(5000*60);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -48,6 +48,9 @@
         <li class="nav-item <% if(uri.startsWith("/emp")){ %>active <%}%>">
           <a class="nav-link" href= "/emp/list.jsp?page=1">사원관리<span class="sr-only">(current)</span></a>
         </li>
+        <li class="nav-item <% if(uri.startsWith("/crawling")){ %> active <%}%>">
+          <a class="nav-link" href="/crawling/list.jsp?page=1">크롤링</a>
+          
         <li class="nav-item <% if(uri.startsWith("/notice")){ %> active <%}%>">
           <a class="nav-link" href="/notice/list.jsp?page=1">공지사항</a>
         </li>

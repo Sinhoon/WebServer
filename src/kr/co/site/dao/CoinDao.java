@@ -10,6 +10,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import kr.co.acorn.hello.ConnLocator;
 import kr.co.site.dto.CoinDto;
 
 public class CoinDao {
@@ -41,14 +42,11 @@ public class CoinDao {
 		PreparedStatement psmt = null;
 
 		try {
-			//Context context = new InitialContext();
-			//ds = (DataSource) context.lookup("java:comp/env/jdbc/site");
-			//con = ds.getConnection();
 			con = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/acorn?autoReconnect=true"
-					,"root","root1234");
+			"jdbc:mysql://localhost:3306/site?autoReconnect=true" ,"root","123");
+			
 			StringBuffer sql = new StringBuffer();
-			sql.append("INSERT into coin(cname,cprice,ctime) VALUES(?,?,?);");
+			sql.append("INSERT into coin(cname,cprice,ctime) VALUES(?,?,DATE_FORMAT(?,'%y/%m/%d/%h/%m'));");
 			psmt = con.prepareStatement(sql.toString());
 			int index = 0;
 			psmt.setString(++index, dto.getName());

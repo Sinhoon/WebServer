@@ -74,12 +74,9 @@
 				</div>
 				 <input type="hidden" name="page" value="<%=cPage %>"/>
 				<div class="text-right">
-					<a href="list.jsp?page=<%=cPage%>"
-						class="btn btn-outline-secondary">목록</a>
-					<button type="button" id="updateDept"
-						class="btn btn-outline-success">수정</button>
-					<button type="button" id="deleteDept"
-						class="btn btn-outline-danger">삭제</button>
+					<button type="button" id="prepage" class="btn btn-outline-secondary">이전</button>
+					<button type="button" id="updateDept"class="btn btn-outline-success">수정</button>
+					<button type="button" id="deleteDept" class="btn btn-outline-danger">삭제</button>
 				</div>
 			</form>
 		</div>
@@ -92,6 +89,9 @@
 <script>
 	$(function() {
 		$("#no").focus();
+		$("#prepage").click(function(e) {
+			history.back(-1);
+		});
 		$("#updateDept").click(function(e) {
 			//자바스크립트 유효성 검사.
 			e.preventDefault();
