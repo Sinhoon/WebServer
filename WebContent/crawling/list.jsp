@@ -120,12 +120,12 @@
 							String[][] list = new String[elements.size()][3];
 							for (int i = 0; i < elements.size(); i++) {
 								Element trElement = elements.get(i);
-/* 								list[i][0] = DayChange.change(trElement.child(0).text());
+								list[i][0] = DayChange.change(trElement.child(0).text());
 								list[i][1] = trElement.child(2).text();
-								list[i][2] = trElement.child(3).text(); */
+								list[i][2] = trElement.child(3).text();
 						%>
 						<tr>
-							<td><%=trElement.child(0).text()%></td>
+							<td><%=list[i][0]%></td>
 							<td><%=trElement.child(1).text()%></td>
 							<td><%=trElement.child(2).text()%></td>
 							<td><%=trElement.child(3).text()%></td>
@@ -226,7 +226,7 @@
 			      data.addRows([
 			    	  <%for (int i = 0; i < elements.size(); i++) {%>
 			    	  [new Date(<%=list[i][1].substring(0,4)%>,<%=list[i][1].substring(5,7)%>,<%=list[i][1].substring(8)%>])
-			    	  ,<%=list[i][1].replaceAll(",.","")%>,<%=list[i][2].replaceAll(",.","")%>],
+			    	  ,<%=list[i][1].replaceAll("[,.]","")%>,<%=list[i][2].replaceAll("[,.]","")%>],
 					 <% } %>
 			      ]);
 
@@ -244,7 +244,7 @@
 			    	        axes: {
 			    	          // Adds labels to each axis; they don't have to match the axis names.
 			    	          y: {
-			    	        	  MarketCap: {label: 'MarketCap'},
+			    	        	  MarketCap: {label: 'MarketCap'}, 	
 			    	        	  Price: {label: 'Price'}
 			    	          }
 			    	        }
