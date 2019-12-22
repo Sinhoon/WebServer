@@ -17,6 +17,7 @@
 
 <%
 	request.setCharacterEncoding("utf-8");
+	String[][] list = null;
 	String coin = request.getParameter("coin");
 	String endDate = request.getParameter("endDate");
 	String startDate = request.getParameter("startDate");
@@ -170,8 +171,8 @@
 								e.printStackTrace();
 							}
 							Elements elements = doc.select(".cmc-table__table-wrapper-outer table tbody tr");
-							
-							String[][] list = new String[elements.size()][3];
+							if(elements.size() != 0) {
+							list = new String[elements.size()][3];
 							for (int i = 0; i < elements.size(); i++) {
 								Element trElement = elements.get(i);
 								list[i][0] = DayChange.change(trElement.child(0).text());
@@ -188,11 +189,12 @@
 							<td><%=trElement.child(6).text()%></td>
 						</tr>
 						<%
-							}
+							}} else {
 						%>
 						<tr>
 							<td colspan="6">데이터가 존재하지 않습니다.</td>
 						</tr>
+						<% }%>
 					</tbody>
 				</table>
 
@@ -208,6 +210,7 @@
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js">
 </script>
 <script>
+<% if(elements.size() != 0) { %>
 $(document).ready(
 		function() {
 			   google.charts.load('current', {'packages':['line', 'corechart']});
@@ -250,8 +253,6 @@ $(document).ready(
 			      }
 			      drawMaterialChart();
 			    }
-
 		});
+	<% }%>	
 </script>
-
-<%@ include file="../inc/footer.jsp"%>
