@@ -12,23 +12,8 @@ public class test {
 	public static void main(String[] args) {
 		
 
-	String name = null;
-	Document doc = null;
-	Elements items = null;
-	try {
-		doc = Jsoup.connect("https://coinmarketcap.com/currencies/ethereum/historical-data/?start=20191120&end=20191219").get();
-		items = doc.select(".cmc-table__table-wrapper-outer table tbody tr ");
-		//System.out.println(items);
-		for (int i = 0; i < items.size() ; i++) {
-			Element coinElement = items.get(i);
-			name = coinElement.child(0).text();	
-		}
+	int[][] a = new int[3][2];
+	a[0][0]= 1;
 	
-	
-	} catch (IOException e) {
-	
-		e.printStackTrace();
-	}
-
 }
 }

@@ -11,6 +11,7 @@
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="kr.co.acorn.dao.DeptDao"%>
 <%@ page import="java.io.IOException"%>
+
 <%@ include file="../inc/header.jsp"%>
 
 
@@ -48,6 +49,108 @@
 	type="text/css" />
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+
+<!-- main start-->
+
+<div class="container">
+	<div class="row">
+		<div class="col-lg-12">
+			<h3>
+				크롤링 <
+				<%=coin%>
+				>
+			</h3>
+			<div class="table-responsive-lg">
+				<form name="f" method="post" action="list.jsp">
+					<select id="coin" name="coin">
+						<option value="bitcoin" <%if (coin.equals("bitcoin")) {%> selected
+							<%}%>>bitcoin</option>
+						<option value="ethereum" <%if (coin.equals("ethereum")) {%>
+							selected <%}%>>ethereum</option>
+						<option value="xrp" <%if (coin.equals("xrp")) {%> selected <%}%>>xrp</option>
+					</select> <input type="text" id="startDate" name="startDate"
+						value="<%=startDate%>"> <input type="text" id="endDate"
+						name="endDate" value="<%=endDate%>">
+
+					<button id="sub" class="btn btn-outline-secondary">검색</button>
+				</form>
+
+			
+				<br>
+				<div id="chart_div"></div>
+
+				<table class="table table-hover">
+					<colgroup>
+						<col width="10%" />
+						<col width="15%" />
+						<col width="15%" />
+						<col width="15%" />
+						<col width="15%" />
+						<col width="15%" />
+						<col width="15%" />
+					</colgroup>
+					<thead>
+						<tr>
+							<th scope="col">Date</th>
+							<th scope="col">Opens</th>
+							<th scope="col">High</th>
+							<th scope="col">Low</th>
+							<th scope="col">Close</th>
+							<th scope="col">Volume</th>
+							<th scope="col">MarketCap</th>
+						</tr>
+					</thead>
+					<tbody>
+						<%
+						 	
+							String url = "https://coinmarketcap.com/currencies/" + coin + "/historical-data/?start=" + startDate
+									+ "&end=" + endDate;
+							Document doc = null;
+
+							try {
+								doc = Jsoup.connect(url).get();
+
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+							doc = null;
+							Elements elements = doc.select(".cmc-table__table-wrapper-outer table tbody tr");
+							
+							String[][] list = new String[elements.size()][3];
+							for (int i = 0; i < elements.size(); i++) {
+								Element trElement = elements.get(i);
+/* 								list[i][0] = DayChange.change(trElement.child(0).text());
+								list[i][1] = trElement.child(2).text();
+								list[i][2] = trElement.child(3).text(); */
+						%>
+						<tr>
+							<td><%=trElement.child(0).text()%></td>
+							<td><%=trElement.child(1).text()%></td>
+							<td><%=trElement.child(2).text()%></td>
+							<td><%=trElement.child(3).text()%></td>
+							<td><%=trElement.child(4).text()%></td>
+							<td><%=trElement.child(5).text()%></td>
+							<td><%=trElement.child(6).text()%></td>
+						</tr>
+						<%
+							}
+						%>
+						<tr>
+							<td colspan="6">데이터가 존재하지 않습니다.</td>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</div>
+
+<!-- main end-->
 <script type="text/javascript">
 	$(document).ready(
 			function() {
@@ -121,9 +224,10 @@
 			      data.addColumn('number', "Price");
 			      data.addColumn('number', "MarketCap");
 			      data.addRows([
-			    	  [new Date(2014, 0),  5,  5.7],
-			          [new Date(2014, 1),  4,  8.7],
-			          [new Date(2014, 2),  5,   12],
+			    	  <%for (int i = 0; i < elements.size(); i++) {%>
+			    	  [new Date(<%=list[i][1].substring(0,4)%>,<%=list[i][1].substring(5,7)%>,<%=list[i][1].substring(8)%>])
+			    	  ,<%=list[i][1].replaceAll(",.","")%>,<%=list[i][2].replaceAll(",.","")%>],
+					 <% } %>
 			      ]);
 
 			      var materialOptions = {
@@ -157,107 +261,6 @@
 			    }
 			});
 </script>
-
-
-<!-- main start-->
-
-<div class="container">
-	<div class="row">
-		<div class="col-lg-12">
-			<h3>
-				크롤링 <
-				<%=coin%>
-				>
-			</h3>
-			<div class="table-responsive-lg">
-				<form name="f" method="post" action="list.jsp">
-					<select id="coin" name="coin">
-						<option value="bitcoin" <%if (coin.equals("bitcoin")) {%> selected
-							<%}%>>bitcoin</option>
-						<option value="ethereum" <%if (coin.equals("ethereum")) {%>
-							selected <%}%>>ethereum</option>
-						<option value="xrp" <%if (coin.equals("xrp")) {%> selected <%}%>>xrp</option>
-					</select> <input type="text" id="startDate" name="startDate"
-						value="<%=startDate%>"> <input type="text" id="endDate"
-						name="endDate" value="<%=endDate%>">
-
-					<button id="sub" class="btn btn-outline-secondary">검색</button>
-				</form>
-
-			
-				<br>
-				<div id="chart_div"></div>
-
-				<table class="table table-hover">
-					<colgroup>
-						<col width="10%" />
-						<col width="15%" />
-						<col width="15%" />
-						<col width="15%" />
-						<col width="15%" />
-						<col width="15%" />
-						<col width="15%" />
-					</colgroup>
-					<thead>
-						<tr>
-							<th scope="col">Date</th>
-							<th scope="col">Opens</th>
-							<th scope="col">High</th>
-							<th scope="col">Low</th>
-							<th scope="col">Close</th>
-							<th scope="col">Volume</th>
-							<th scope="col">MarketCap</th>
-						</tr>
-					</thead>
-					<tbody>
-						<%
-						 	
-							String url = "https://coinmarketcap.com/currencies/" + coin + "/historical-data/?start=" + startDate
-									+ "&end=" + endDate;
-							Document doc = null;
-
-							try {
-								doc = Jsoup.connect(url).get();
-
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-							Elements elements = doc.select(".cmc-table__table-wrapper-outer table tbody tr");
-							
-							//String[][] list = new String[elements.size()][3];
-							for (int i = 0; i < elements.size(); i++) {
-								Element trElement = elements.get(i);
-								//list[i][0] = DayChange.change(trElement.child(0).text());
-								//list[i][1] = trElement.child(2).text();
-								//list[i][2] = trElement.child(3).text();
-						%>
-						<tr>
-							<td><%=trElement.child(0).text()%></td>
-							<td><%=trElement.child(1).text()%></td>
-							<td><%=trElement.child(2).text()%></td>
-							<td><%=trElement.child(3).text()%></td>
-							<td><%=trElement.child(4).text()%></td>
-							<td><%=trElement.child(5).text()%></td>
-							<td><%=trElement.child(6).text()%></td>
-						</tr>
-						<%
-							}
-						%>
-						<tr>
-							<td colspan="6">데이터가 존재하지 않습니다.</td>
-						</tr>
-					</tbody>
-				</table>
-
-			</div>
-
-		</div>
-
-	</div>
-
-</div>
-
-<!-- main end-->
 
 <%@ include file="../inc/footer.jsp"%>
 
