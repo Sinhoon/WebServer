@@ -34,7 +34,7 @@
 		Calendar cal = Calendar.getInstance();
 		endDate = new SimpleDateFormat("yyyyMMdd").format(cal.getTime());
 	}
-	
+
 	String listurl = "https://coinmarketcap.com/";
 	Document listdoc = null;
 	try {
@@ -43,7 +43,7 @@
 		e.printStackTrace();
 	}
 	Elements listelements = listdoc.select(".cmc-table__column-name a");
-	for(int i=0; i < listelements.size();i++){
+	for (int i = 0; i < listelements.size(); i++) {
 		coinlist.add(listelements.get(i).text());
 	}
 %>
@@ -118,151 +118,193 @@
 				$("#sub").click(function() {
 					f.submit();
 				});
-				
+
 			});
 </script>
 
 <!-- main start-->
 
 <div class="container">
-	<div class="row">
-		<div class="col-lg-12 col-sm-3">
-			<h3>
-				<%=coin%>
-			</h3>
-			
-				<form name="f" method="post" action="list.jsp">
-					<select id="coin" name="coin">
-						<%for (int i =0 ; i < coinlist.size(); i++){ %>
-						<option value="<%=coinlist.get(i) %>" <%if (coin.equals(coinlist.get(i))) {%> selected
-							<%}%>><%=coinlist.get(i) %></option>
-						<% }%>
-					</select> 
-					From
-					<input type="text" id="startDate" name="startDate" value="<%=startDate%>"> 
-					To
-					<input type="text" id="endDate" name="endDate" value="<%=endDate%>">
-
-					<button id="sub" class="btn btn-outline-secondary">검색</button>
-				</form>
+	<h2>
+		<%=coin%>
+	</h2>
+	<form name="f" method="post" action="list.jsp">
+		<div class="row">
+			<div class="col-md-3">
+				<select id="coin" name="coin">
+					<%
+						for (int i = 0; i < coinlist.size(); i++) {
+					%>
+					<option value="<%=coinlist.get(i)%>"
+						<%if (coin.equals(coinlist.get(i))) {%> selected <%}%>><%=coinlist.get(i)%></option>
+					<%
+						}
+					%>
+				</select>
 			</div>
 			
-				<br>
-				<div class="col-lg-12" id="chart_div"></div>
-				<div class="table-responsive-lg-12">
-				<table class="table table-hover">
-					<colgroup>
-						<col width="10%" />
-						<col width="15%" />
-						<col width="15%" />
-						<col width="15%" />
-						<col width="15%" />
-						<col width="15%" />
-						<col width="15%" />
-					</colgroup>
-					<thead>
-						<tr>
-							<th scope="col">Date</th>
-							<th scope="col">Opens</th>
-							<th scope="col">High</th>
-							<th scope="col">Low</th>
-							<th scope="col">Close</th>
-							<th scope="col">Volume</th>
-							<th scope="col">MarketCap</th>
-						</tr>
-					</thead>
-					<tbody>
-						<%
-						 	
-							String url = "https://coinmarketcap.com/currencies/" + coin + "/historical-data/?start=" + startDate
-									+ "&end=" + endDate;
-							Document doc = null;
-							try {
-								doc = Jsoup.connect(url).get();
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-							Elements elements = doc.select(".cmc-table__table-wrapper-outer table tbody tr");
-							if(elements.size() != 0) {
-							list = new String[elements.size()][3];
-							for (int i = 0; i < elements.size(); i++) {
-								Element trElement = elements.get(i);
-								list[i][0] = DayChange.change(trElement.child(0).text());
-								list[i][1] = trElement.child(2).text();
-								list[i][2] = trElement.child(3).text();
-						%>
-						<tr>
-							<td><%=list[i][0]%></td>
-							<td><%=trElement.child(1).text()%></td>
-							<td><%=trElement.child(2).text()%></td>
-							<td><%=trElement.child(3).text()%></td>
-							<td><%=trElement.child(4).text()%></td>
-							<td><%=trElement.child(5).text()%></td>
-							<td><%=trElement.child(6).text()%></td>
-						</tr>
-						<%
-							}} else {
-						%>
-						<tr>
-							<td colspan="6">데이터가 존재하지 않습니다.</td>
-						</tr>
-						<% }%>
-					</tbody>
-				</table>
-
+			<div class="col-lg-1">
+			From
 			</div>
+			<div class="col-lg-3">
+				<input type="text" id="startDate" name="startDate" value="<%=startDate%>" size="25">
+			</div>
+			<div class="col-lg-1">
+			To
+			</div>
+			<div class="col-lg-3">
+				<input type="text" id="endDate" name="endDate" value="<%=endDate%>" size="25">
+			</div>
+			<div class="col-lg-1">
+				<button id="sub" class="btn btn-outline-secondary">검색</button>
+			</div>
+		</div>
+	</form>
+
+
+	<br>
+	<div class="col-lg-12" id="chart_div"></div>
+	<div class="table-responsive-lg-12">
+		<table class="table table-hover">
+			<colgroup>
+				<col width="10%" />
+				<col width="15%" />
+				<col width="15%" />
+				<col width="15%" />
+				<col width="15%" />
+				<col width="15%" />
+				<col width="15%" />
+			</colgroup>
+			<thead>
+				<tr>
+					<th scope="col">Date</th>
+					<th scope="col">Opens</th>
+					<th scope="col">High</th>
+					<th scope="col">Low</th>
+					<th scope="col">Close</th>
+					<th scope="col">Volume</th>
+					<th scope="col">MarketCap</th>
+				</tr>
+			</thead>
+			<tbody>
+				<%
+					String url = "https://coinmarketcap.com/currencies/" + coin + "/historical-data/?start=" + startDate
+							+ "&end=" + endDate;
+					Document doc = null;
+					try {
+						doc = Jsoup.connect(url).get();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					Elements elements = doc.select(".cmc-table__table-wrapper-outer table tbody tr");
+					if (elements.size() != 0) {
+						list = new String[elements.size()][3];
+						for (int i = 0; i < elements.size(); i++) {
+							Element trElement = elements.get(i);
+							list[i][0] = DayChange.change(trElement.child(0).text());
+							list[i][1] = trElement.child(2).text();
+							list[i][2] = trElement.child(3).text();
+				%>
+				<tr>
+					<td><%=list[i][0]%></td>
+					<td><%=trElement.child(1).text()%></td>
+					<td><%=trElement.child(2).text()%></td>
+					<td><%=trElement.child(3).text()%></td>
+					<td><%=trElement.child(4).text()%></td>
+					<td><%=trElement.child(5).text()%></td>
+					<td><%=trElement.child(6).text()%></td>
+				</tr>
+				<%
+					}
+					} else {
+				%>
+				<tr>
+					<td colspan="6">데이터가 존재하지 않습니다.</td>
+				</tr>
+				<%
+					}
+				%>
+			</tbody>
+		</table>
 
 	</div>
-
 </div>
 
+
 <!-- main end-->
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js">
+<script type="text/javascript"
+	src="https://www.gstatic.com/charts/loader.js">
+	
 </script>
 <script>
-<% if(elements.size() != 0) { %>
-$(document).ready(
-		function() {
-			   google.charts.load('current', {'packages':['line', 'corechart']});
-			    google.charts.setOnLoadCallback(drawChart);
-			    function drawChart() {
-			      var chartDiv = document.getElementById('chart_div');
-			      var data = new google.visualization.DataTable();
-			      data.addColumn('date', 'Month');
-			      data.addColumn('number', "Price");
-			      data.addColumn('number', "MarketCap");
-			      data.addRows([
-			    	   <%for (int i = 0; i < elements.size(); i++) {%>
-			    	  [new Date(<%=list[i][0].substring(0,4)%>,<%=Integer.parseInt(list[i][0].substring(5,7))-1%>,<%=list[i][0].substring(8)%>)
-			    	  ,<%=list[i][1].replaceAll("[,.]","")%>,<%=list[i][2].replaceAll("[,.]","")%>],
-					 <% } %> 
-			      ]);
-			      var materialOptions = {
-			    	        chart: {
-			    	          title: 'Average Temperatures and Daylight in Iceland Throughout the Year'
-			    	        },
-			    	        width: 900,
-			    	        height: 500,
-			    	        series: {
-			    	          // Gives each series an axis name that matches the Y-axis below.
-			    	          0: {axis: 'MarketCap'},
-			    	            1: {axis: 'Price'}
-			    	        },
-			    	        axes: {
-			    	          // Adds labels to each axis; they don't have to match the axis names.
-			    	          y: {
-			    	        	  MarketCap: {label: 'MarketCap'}, 	
-			    	        	  Price: {label: 'Price'}
-			    	          }
-			    	        }
-			    	      };
-			       
-			      function drawMaterialChart() {
-			        var materialChart = new google.charts.Line(chartDiv);
-			        materialChart.draw(data, materialOptions);
-			      }
-			      drawMaterialChart();
-			    }
-		});
-	<% }%>	
+	
+<%if (elements.size() != 0) {%>
+	$(document)
+			.ready(
+					function() {
+						google.charts.load('current', {
+							'packages' : [ 'line', 'corechart' ]
+						});
+						google.charts.setOnLoadCallback(drawChart);
+						function drawChart() {
+							var chartDiv = document.getElementById('chart_div');
+							var data = new google.visualization.DataTable();
+							data.addColumn('date', 'Month');
+							data.addColumn('number', "Price");
+							data.addColumn('number', "MarketCap");
+							data
+									.addRows([
+<%for (int i = 0; i < elements.size(); i++) {%>
+	[
+													new Date(
+<%=list[i][0].substring(0, 4)%>
+	,
+<%=Integer.parseInt(list[i][0].substring(5, 7)) - 1%>
+	,
+<%=list[i][0].substring(8)%>
+	),
+<%=list[i][1].replaceAll("[,.]", "")%>
+	,
+<%=list[i][2].replaceAll("[,.]", "")%>
+	],
+<%}%>
+	]);
+							var materialOptions = {
+								chart : {
+									title : 'Average Temperatures and Daylight in Iceland Throughout the Year'
+								},
+								width : 900,
+								height : 500,
+								series : {
+									// Gives each series an axis name that matches the Y-axis below.
+									0 : {
+										axis : 'MarketCap'
+									},
+									1 : {
+										axis : 'Price'
+									}
+								},
+								axes : {
+									// Adds labels to each axis; they don't have to match the axis names.
+									y : {
+										MarketCap : {
+											label : 'MarketCap'
+										},
+										Price : {
+											label : 'Price'
+										}
+									}
+								}
+							};
+
+							function drawMaterialChart() {
+								var materialChart = new google.charts.Line(
+										chartDiv);
+								materialChart.draw(data, materialOptions);
+							}
+							drawMaterialChart();
+						}
+					});
+<%}%>
+	
 </script>
