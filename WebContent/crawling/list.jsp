@@ -1,4 +1,4 @@
-<%@page import="test.DayChange"%>
+<%@page import="day.DayChange"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Calendar"%>
 <%@page import="java.util.Date"%>
@@ -44,12 +44,69 @@
 </nav>
 
 <!-- breadcrumb end-->
-<link rel="stylesheet"
-	href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css"
-	type="text/css" />
 
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
+<script type="text/javascript">
+	$(document).ready(
+			function() {
+				$.datepicker.setDefaults($.datepicker.regional['ko']);
+				$("#startDate")
+						.datepicker(
+								{
+									changeMonth : true,
+									changeYear : true,
+									nextText : '다음 달',
+									prevText : '이전 달',
+									dayNames : [ '일요일', '월요일', '화요일', '수요일',
+											'목요일', '금요일', '토요일' ],
+									dayNamesMin : [ '일', '월', '화', '수', '목',
+											'금', '토' ],
+									monthNamesShort : [ '1월', '2월', '3월', '4월',
+											'5월', '6월', '7월', '8월', '9월',
+											'10월', '11월', '12월' ],
+									monthNames : [ '1월', '2월', '3월', '4월',
+											'5월', '6월', '7월', '8월', '9월',
+											'10월', '11월', '12월' ],
+									dateFormat : "yymmdd",
+									maxDate : 0, // 선택할수있는 최소날짜, ( 0 : 오늘 이후 날짜 선택 불가)
+									onClose : function(selectedDate) {
+										//시작일(startDate) datepicker가 닫힐때
+										//종료일(endDate)의 선택할수있는 최소 날짜(minDate)를 선택한 시작일로 지정
+										$("#endDate").datepicker("option",
+												"minDate", selectedDate);
+									}
+								});
+				$("#endDate")
+						.datepicker(
+								{
+									changeMonth : true,
+									changeYear : true,
+									nextText : '다음 달',
+									prevText : '이전 달',
+									dayNames : [ '일요일', '월요일', '화요일', '수요일',
+											'목요일', '금요일', '토요일' ],
+									dayNamesMin : [ '일', '월', '화', '수', '목',
+											'금', '토' ],
+									monthNamesShort : [ '1월', '2월', '3월', '4월',
+											'5월', '6월', '7월', '8월', '9월',
+											'10월', '11월', '12월' ],
+									monthNames : [ '1월', '2월', '3월', '4월',
+											'5월', '6월', '7월', '8월', '9월',
+											'10월', '11월', '12월' ],
+									dateFormat : "yymmdd",
+									maxDate : 0, // 선택할수있는 최대날짜, ( 0 : 오늘 이후 날짜 선택 불가)
+									onClose : function(selectedDate) {
+										// 종료일(endDate) datepicker가 닫힐때
+										// 시작일(startDate)의 선택할수있는 최대 날짜(maxDate)를 선택한 시작일로 지정
+										$("#startDate").datepicker("option",
+												"maxDate", selectedDate);
+									}
+								});
+				$("#sub").click(function() {
+					f.submit();
+				});
+				
+			});
+</script>
 
 <!-- main start-->
 
@@ -107,14 +164,11 @@
 							String url = "https://coinmarketcap.com/currencies/" + coin + "/historical-data/?start=" + startDate
 									+ "&end=" + endDate;
 							Document doc = null;
-
 							try {
 								doc = Jsoup.connect(url).get();
-
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
-							doc = null;
 							Elements elements = doc.select(".cmc-table__table-wrapper-outer table tbody tr");
 							
 							String[][] list = new String[elements.size()][3];
@@ -151,71 +205,12 @@
 </div>
 
 <!-- main end-->
-<script type="text/javascript">
-	$(document).ready(
-			function() {
-				$.datepicker.setDefaults($.datepicker.regional['ko']);
-				$("#startDate")
-						.datepicker(
-								{
-									changeMonth : true,
-									changeYear : true,
-									nextText : '다음 달',
-									prevText : '이전 달',
-									dayNames : [ '일요일', '월요일', '화요일', '수요일',
-											'목요일', '금요일', '토요일' ],
-									dayNamesMin : [ '일', '월', '화', '수', '목',
-											'금', '토' ],
-									monthNamesShort : [ '1월', '2월', '3월', '4월',
-											'5월', '6월', '7월', '8월', '9월',
-											'10월', '11월', '12월' ],
-									monthNames : [ '1월', '2월', '3월', '4월',
-											'5월', '6월', '7월', '8월', '9월',
-											'10월', '11월', '12월' ],
-									dateFormat : "yymmdd",
-									maxDate : 0, // 선택할수있는 최소날짜, ( 0 : 오늘 이후 날짜 선택 불가)
-									onClose : function(selectedDate) {
-										//시작일(startDate) datepicker가 닫힐때
-										//종료일(endDate)의 선택할수있는 최소 날짜(minDate)를 선택한 시작일로 지정
-										$("#endDate").datepicker("option",
-												"minDate", selectedDate);
-									}
-
-								});
-				$("#endDate")
-						.datepicker(
-								{
-									changeMonth : true,
-									changeYear : true,
-									nextText : '다음 달',
-									prevText : '이전 달',
-									dayNames : [ '일요일', '월요일', '화요일', '수요일',
-											'목요일', '금요일', '토요일' ],
-									dayNamesMin : [ '일', '월', '화', '수', '목',
-											'금', '토' ],
-									monthNamesShort : [ '1월', '2월', '3월', '4월',
-											'5월', '6월', '7월', '8월', '9월',
-											'10월', '11월', '12월' ],
-									monthNames : [ '1월', '2월', '3월', '4월',
-											'5월', '6월', '7월', '8월', '9월',
-											'10월', '11월', '12월' ],
-									dateFormat : "yymmdd",
-									maxDate : 0, // 선택할수있는 최대날짜, ( 0 : 오늘 이후 날짜 선택 불가)
-									onClose : function(selectedDate) {
-										// 종료일(endDate) datepicker가 닫힐때
-										// 시작일(startDate)의 선택할수있는 최대 날짜(maxDate)를 선택한 시작일로 지정
-										$("#startDate").datepicker("option",
-												"maxDate", selectedDate);
-									}
-
-								});
-
-				$("#sub").click(function() {
-					f.submit();
-				});
-				
-				
-			    google.charts.load('current', {'packages':['line', 'corechart']});
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js">
+</script>
+<script>
+$(document).ready(
+		function() {
+			   google.charts.load('current', {'packages':['line', 'corechart']});
 			    google.charts.setOnLoadCallback(drawChart);
 			    function drawChart() {
 			      var chartDiv = document.getElementById('chart_div');
@@ -224,12 +219,11 @@
 			      data.addColumn('number', "Price");
 			      data.addColumn('number', "MarketCap");
 			      data.addRows([
-			    	  <%for (int i = 0; i < elements.size(); i++) {%>
-			    	  [new Date(<%=list[i][1].substring(0,4)%>,<%=list[i][1].substring(5,7)%>,<%=list[i][1].substring(8)%>])
+			    	   <%for (int i = 0; i < elements.size(); i++) {%>
+			    	  [new Date(<%=list[i][0].substring(0,4)%>,<%=list[i][0].substring(5,7)%>,<%=list[i][0].substring(8)%>)
 			    	  ,<%=list[i][1].replaceAll("[,.]","")%>,<%=list[i][2].replaceAll("[,.]","")%>],
-					 <% } %>
+					 <% } %> 
 			      ]);
-
 			      var materialOptions = {
 			    	        chart: {
 			    	          title: 'Average Temperatures and Daylight in Iceland Throughout the Year'
@@ -250,18 +244,14 @@
 			    	        }
 			    	      };
 			       
-
-
 			      function drawMaterialChart() {
 			        var materialChart = new google.charts.Line(chartDiv);
 			        materialChart.draw(data, materialOptions);
 			      }
 			      drawMaterialChart();
-
 			    }
-			});
+
+		});
 </script>
 
 <%@ include file="../inc/footer.jsp"%>
-
-

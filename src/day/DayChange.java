@@ -1,4 +1,4 @@
-package test;
+package day;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,9 +30,10 @@ public class DayChange {
 		monthChange.put("Jan", "01");
 
 		output = input.substring(5) + "/" + monthChange.get(input.substring(0, 3)) + "/"
-				+ Integer.parseInt(input.substring(3, 5));
+				+ input.substring(3, 5);
 
 		return output;
 	}
 
 }
+
