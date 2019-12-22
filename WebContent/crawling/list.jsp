@@ -21,6 +21,7 @@
 	String coin = request.getParameter("coin");
 	String endDate = request.getParameter("endDate");
 	String startDate = request.getParameter("startDate");
+	ArrayList<String> coinlist = new ArrayList<String>();
 	if (coin == null) {
 		coin = "bitcoin";
 	}
@@ -32,6 +33,18 @@
 	if (endDate == null) {
 		Calendar cal = Calendar.getInstance();
 		endDate = new SimpleDateFormat("yyyyMMdd").format(cal.getTime());
+	}
+	
+	String listurl = "https://coinmarketcap.com/";
+	Document listdoc = null;
+	try {
+		listdoc = Jsoup.connect(listurl).get();
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+	Elements listelements = listdoc.select(".cmc-table__column-name a");
+	for(int i=0; i < listelements.size();i++){
+		coinlist.add(listelements.get(i).text());
 	}
 %>
 
@@ -113,31 +126,30 @@
 
 <div class="container">
 	<div class="row">
-		<div class="col-lg-12">
+		<div class="col-lg-12 col-sm-3">
 			<h3>
-				크롤링 <
 				<%=coin%>
-				>
 			</h3>
-			<div class="table-responsive-lg">
+			
 				<form name="f" method="post" action="list.jsp">
 					<select id="coin" name="coin">
-						<option value="bitcoin" <%if (coin.equals("bitcoin")) {%> selected
-							<%}%>>bitcoin</option>
-						<option value="ethereum" <%if (coin.equals("ethereum")) {%>
-							selected <%}%>>ethereum</option>
-						<option value="xrp" <%if (coin.equals("xrp")) {%> selected <%}%>>xrp</option>
-					</select> <input type="text" id="startDate" name="startDate"
-						value="<%=startDate%>"> <input type="text" id="endDate"
-						name="endDate" value="<%=endDate%>">
+						<%for (int i =0 ; i < coinlist.size(); i++){ %>
+						<option value="<%=coinlist.get(i) %>" <%if (coin.equals(coinlist.get(i))) {%> selected
+							<%}%>><%=coinlist.get(i) %></option>
+						<% }%>
+					</select> 
+					From
+					<input type="text" id="startDate" name="startDate" value="<%=startDate%>"> 
+					To
+					<input type="text" id="endDate" name="endDate" value="<%=endDate%>">
 
 					<button id="sub" class="btn btn-outline-secondary">검색</button>
 				</form>
-
+			</div>
 			
 				<br>
-				<div id="chart_div"></div>
-
+				<div class="col-lg-12" id="chart_div"></div>
+				<div class="table-responsive-lg-12">
 				<table class="table table-hover">
 					<colgroup>
 						<col width="10%" />
@@ -200,8 +212,6 @@
 
 			</div>
 
-		</div>
-
 	</div>
 
 </div>
@@ -223,7 +233,7 @@ $(document).ready(
 			      data.addColumn('number', "MarketCap");
 			      data.addRows([
 			    	   <%for (int i = 0; i < elements.size(); i++) {%>
-			    	  [new Date(<%=list[i][0].substring(0,4)%>,<%=list[i][0].substring(5,7)%>,<%=list[i][0].substring(8)%>)
+			    	  [new Date(<%=list[i][0].substring(0,4)%>,<%=Integer.parseInt(list[i][0].substring(5,7))-1%>,<%=list[i][0].substring(8)%>)
 			    	  ,<%=list[i][1].replaceAll("[,.]","")%>,<%=list[i][2].replaceAll("[,.]","")%>],
 					 <% } %> 
 			      ]);
