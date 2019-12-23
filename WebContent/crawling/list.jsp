@@ -271,7 +271,7 @@
 	]);
 							var materialOptions = {
 								chart : {
-									title : 'Average Temperatures and Daylight in Iceland Throughout the Year'
+									title : '<%= coin %>'
 								},
 								width : 900,
 								height : 500,
