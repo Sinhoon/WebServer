@@ -1,0 +1,35 @@
+jsp -  obj.toString();
+
+jquery - JSON.stringify(obj);
+
+ajax 자동으로 object return
+
+contenttype 기본은 text/html
+
+json 할떄 aplication/json으로 수정
+
+
+
+
+webfundamental  - 서비스 jsp
+web-inf 가 서비스됨 설정  ex) build\classes 에서 java파일 컴파일된 class 파일
+
+C:\dev\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\Webs\upload\file
+
+
+
+
+
+ngix.conf
+        location / {
+            root   C:/dev;
+	    proxy_pass http://localhost:8080;
+            index  index.jsp;
+        } 
+
+
+
+String contextPath = request.getContextPath();  
+
+
+String path = request.getRealPath("/upload/file")	

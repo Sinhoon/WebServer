@@ -1,0 +1,61 @@
+<html>
+<head>
+<meta charset="utf-8">
+<script type="text/javascript">
+	var xhr = null;
+	if (window.XMLHttpRequest) {
+		xhr = new XMLHttpRequest();
+	} else {
+		try {
+			xhr = new ActiveXObject("Msxml2.XMLHTTP");
+		} catch (e) {
+			try {
+				xhr = new ActiveXObject("Microsoft.XMLHTTP");
+			} catch (e) {
+				xhr = false;
+			}
+		}
+	}
+</script>
+
+</head>
+
+<body>
+	<div id="sung"></div>
+	<button id="loadajax">ajax</button>
+</body>
+<script>
+	document.getElementById("loadajax").addEventListener("click", function() {
+		console.log('event')
+		xhr.open("post", "empjson.jsp", true);
+		xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4 && xhr.status == 200) {	
+				// ajax 무조건 string type get
+				console.log(typeof xhr.responseText);
+				console.log(JSON.parse(xhr.responseText));
+				console.log(typeof JSON.parse(xhr.responseText));
+				console.log(JSON.stringify(JSON.parse(xhr.responseText)));
+				console.log(typeof JSON.stringify(JSON.parse(xhr.responseText)));
+				
+				const obj = JSON.parse(xhr.responseText);
+				const listArray = obj.memberlist;
+				console.log(listArray);
+				let msg = '';
+				for(let i = 0;i<listArray.length;i++){
+					let no = listArray[i].no;
+					let name = listArray[i].name;
+					let job = listArray[i].job;
+					msg += no +","+name + ","+ job + "<br>";
+				}
+				document.getElementById("sung").innerHTML = msg;
+					
+			}
+			
+		
+		}
+		
+		xhr.send("start=0&len=20");
+	});
+</script>
+</html>

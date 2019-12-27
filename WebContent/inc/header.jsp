@@ -1,5 +1,9 @@
+<%@page import="kr.co.acorn.dto.MemberDto"%>
 <%@ page pageEncoding="utf-8"%>
+<% String url = request.getRequestURI();
+	String contextPath = request.getContextPath();
 
+%>
 <!doctype html>
 <html lang="en">
 
@@ -32,7 +36,7 @@
 
 <script
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-	
+
 <script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
 <style>
 a {
@@ -57,7 +61,7 @@ a {
 
 	<nav class="navbar navbar-expand-lg navbar-dark"
 		style="background-color: #563d7c">
-		<a class="navbar-brand" href="/index.jsp">Home</a>
+		<a class="navbar-brand" href="<%=contextPath %>/index.jsp">Home</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarTogglerDemo02"
 			aria-controls="navbarTogglerDemo02" aria-expanded="false"
@@ -67,27 +71,50 @@ a {
 
 		<div class="collapse navbar-collapse" id="navbarTogglerDemo02">
 			<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-				<li class="nav-item <%if (uri.startsWith("/dept")) {%>active <%}%>">
-					<a class="nav-link" href="/dept/list.jsp?page=1">부서관리<span
+				<li class="nav-item <%if (uri.startsWith(contextPath+"/dept")) {%>active <%}%>">
+					<a class="nav-link" href="<%=contextPath %>/dept/list.jsp?page=1">부서관리<span
 						class="sr-only">(current)</span></a>
 				</li>
 				<li class="nav-item <%if (uri.startsWith("/emp")) {%>active <%}%>">
-					<a class="nav-link" href="/emp/list.jsp?page=1">사원관리<span
+					<a class="nav-link" href="<%=contextPath %>/emp/list.jsp?page=1">사원관리<span
 						class="sr-only">(current)</span></a>
 				</li>
 				<li
 					class="nav-item <%if (uri.startsWith("/crawling")) {%> active <%}%>">
-					<a class="nav-link" href="/crawling/list.jsp?">크롤링</a>
+					<a class="nav-link" href="<%=contextPath %>/crawling/list.jsp?">크롤링</a>
 				<li
 					class="nav-item <%if (uri.startsWith("/notice")) {%> active <%}%>">
-					<a class="nav-link" href="/notice/list.jsp?page=1">공지사항</a>
+					<a class="nav-link" href="<%=contextPath %>/notice/list.jsp?page=1">공지사항</a>
+				</li>
+				<li class="nav-item <%if (uri.startsWith("/file")) {%>active <%}%>">
+					<a class="nav-link" href="<%=contextPath %>/file/index.jsp">파일업로드<span
+						class="sr-only">(current)</span></a>
 				</li>
 			</ul>
-			<form class="form-inline my-2 my-lg-0">
-				<input class="form-control mr-sm-2" type="search"
-					placeholder="Search">
-				<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-			</form>
+			<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+				<%
+					MemberDto memberDto = (MemberDto) session.getAttribute("member");
+					if (memberDto == null) {
+				%>
+				<li class="nav-item"><a class="nav-link"
+					href="<%=contextPath %>/member/write.jsp">회원가입<span class="sr-only">(current)</span></a>
+				</li>
+				<li class="nav-item"><a class="nav-link"
+					href="<%=contextPath %>/member/login.jsp">로그인<span class="sr-only">(current)</span></a>
+				</li>
+				<%
+					} else {
+				%>
+				<li class="nav-item"><a class="nav-link"
+					href="#"> <%=memberDto.getName()%>님 환영합니다<span class="sr-only">(current)</span></a>
+				</li>
+				<li class="nav-item"><a class="nav-link"
+					href="<%=contextPath %>/member/logout.jsp">로그아웃<span class="sr-only">(current)</span></a>
+				</li>
+				<%}%>
+
+			</ul>
+
 		</div>
 	</nav>
 	<!-- navbar end-->

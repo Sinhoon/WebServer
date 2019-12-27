@@ -235,9 +235,10 @@ public class EmpDao {
 		return dto;
 	}
 	
-	public String selectJSON(int start, int len){
-		JSONObject jsonobj = new JSONObject();
-		JSONArray jsonarr = new JSONArray();
+	public String selectJson(int start, int len){
+		JSONObject jsonObj = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+		
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs= null;
@@ -256,21 +257,27 @@ public class EmpDao {
 			pstmt.setInt(++index, len);
 			
 			rs = pstmt.executeQuery();
-
+			DeptDto deptDto = null;
 			JSONObject item = null;
 			while(rs.next()) {
 				index = 0;
 				int no = rs.getInt(++index);
 				String name = rs.getString(++index);
 				String job = rs.getString(++index);
-
+				int mgr = rs.getInt(++index);
+				
+				String dname = rs.getString(++index);
+				int deptNo = rs.getInt(++index);
+				deptDto = new DeptDto(deptNo,dname,null);
+				
+				String hiredate = rs.getString(++index);
+				
 				item = new JSONObject();
-				item.put("no", no);
-				item.put("name", name);
-				item.put("job", job);
-				jsonarr.add(item);
+				item.put("no",no );
+				item.put("name",name );
+				jsonArray.add(item);
 			}
-			jsonobj.put("memberlist",jsonarr);
+			jsonObj.put("items",jsonArray);
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -284,7 +291,6 @@ public class EmpDao {
 				// TODO: handle exception
 			}
 		}
-		return jsonobj.toString();
+		return jsonObj.toString();
 	}
-	
 }

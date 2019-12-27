@@ -1,0 +1,36 @@
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$("#loadajax").click(function(){
+		$.ajax({
+			
+			//type : 'GET',
+			//url : 'empjson.jsp?start=0&length=10',
+			type : 'get',
+			url : 'naver_proxy.jsp',		
+			dataType : 'json', //xml,html
+			jsonp : 'call',
+			error : function(){
+				alert('Json Load ERror')
+			},
+			success : function(obj){		
+				$("#sung").html(JSON.stringify(obj));// parse 된 상태
+			}
+			
+		});
+	});
+		
+	});
+	
+</script>
+
+</head>
+
+<body>
+	<div id="sung"></div>
+	<button id="loadajax">ajax</button>
+</body>
+</html>

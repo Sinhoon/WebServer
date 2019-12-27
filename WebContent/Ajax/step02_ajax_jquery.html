@@ -1,0 +1,35 @@
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$("#loadajax").click(function(){
+		$.ajax({
+			
+			type : 'GET',
+			url : '/member/member_json.jsp?start=0&length=4',
+			//type : 'post',
+			//url : 'empjson.jsp',		
+			//data : {"start":0,"length":5},
+			dataType : 'json', //xml,html	
+			error:function(request,status,error){
+			    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);},
+			success : function(obj){
+				console.log(obj);	// parse 된 상태
+			}
+			
+		});
+	});
+	
+	});
+	
+</script>
+
+</head>
+
+<body>
+	<div id="sung"></div>
+	<button id="loadajax">ajax</button>
+</body>
+</html>
